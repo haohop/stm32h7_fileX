@@ -293,7 +293,7 @@ void fx_app_thread_entry(ULONG thread_input)
   for(int i = 0; i < WR_COUNT; i++)
   {
 	  /* Read the first 28 bytes of the test file.  */
-	  nor_ospi_status =  fx_file_read(&fx_file, read_buffer, 2 * sizeof(data), &bytes_read);
+	  nor_ospi_status =  fx_file_read(&fx_file, read_buffer, sizeof(data), &bytes_read);
 
 	  /* Check the file read status.  */
 	  if ((nor_ospi_status != FX_SUCCESS) || (bytes_read != sizeof(data)))
