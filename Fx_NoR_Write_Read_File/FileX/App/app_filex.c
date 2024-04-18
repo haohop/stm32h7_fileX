@@ -127,7 +127,7 @@ UINT MX_FileX_Init(VOID *memory_ptr)
  * @retval none
  */
 CHAR itoa[1024] = {'\n'};
-ALIGN_32BYTES(CHAR data[35]) = {"This is FileX working on STM32\r\n"};
+ALIGN_32BYTES(CHAR data[35]) = {"This is FileX working on ZW\r\n"};
 ALIGN_32BYTES(CHAR read_buffer[80]);
 void fx_app_thread_entry(ULONG thread_input)
 {
@@ -209,12 +209,39 @@ void fx_app_thread_entry(ULONG thread_input)
   }
 #endif
   
-  /* Open the test file.  */
-  nor_ospi_status =  fx_file_open(&nor_ospi_flash_disk, &fx_file, "STM32.TXT", FX_OPEN_FOR_WRITE);
+#if  DEL_CREATE_TEST
+  nor_ospi_status = fx_file_delete(&nor_ospi_flash_disk, "STM32.TXT");
+    /* Check the file open status.  */
+  if (nor_ospi_status != FX_SUCCESS)
+  {
+    /* Error opening file, call error handler.  */
+    Error_Handler();
+	  printf("Delete error.\n");
+  }
+  
+    /* Create a file called STM32.TXT in the root directory.  */
+  nor_ospi_status =  fx_file_create(&nor_ospi_flash_disk, "ZW.TXT");
+
+  /* Check the create status.  */
+  if (nor_ospi_status != FX_SUCCESS)
+  {
+    /* Check for an already created status. This is expected on the
+    second pass of this loop!  */
+    if (nor_ospi_status != FX_ALREADY_CREATED)
+    {
+      /* Create error, call error handler.  */
+      Error_Handler();
+		printf("Create error.\n");
+    }
+  }
+  
+    /* Open the test file.  */
+  nor_ospi_status =  fx_file_open(&nor_ospi_flash_disk, &fx_file, "ZW.TXT", FX_OPEN_FOR_WRITE);
 
   /* Check the file open status.  */
   if (nor_ospi_status != FX_SUCCESS)
   {
+  	  printf("Open error.\n");
     /* Error opening file, call error handler.  */
     Error_Handler();
   }
@@ -228,6 +255,7 @@ void fx_app_thread_entry(ULONG thread_input)
     /* Error performing file seek, call error handler.  */
     Error_Handler();
   }
+  
   for(int i =0; i< WR_COUNT; i++)
   {
 	  sprintf(itoa,"%d", i );
@@ -248,7 +276,6 @@ void fx_app_thread_entry(ULONG thread_input)
 		/* Error writing to a file, call error handler.  */
 		Error_Handler();
 	  }
-	
   }
 
   /* Close the test file.  */
@@ -269,13 +296,78 @@ void fx_app_thread_entry(ULONG thread_input)
     /* Error closing the file, call error handler.  */
     Error_Handler();
   }
-
-   /* Open the test file.  */
-  nor_ospi_status =  fx_file_open(&nor_ospi_flash_disk, &fx_file, "STM32.TXT", FX_OPEN_FOR_READ);
+#endif
+  
+#if   WRITE_TEST  
+  /* Open the test file.  */
+  nor_ospi_status =  fx_file_open(&nor_ospi_flash_disk, &fx_file, "STM32.TXT", FX_OPEN_FOR_WRITE);
 
   /* Check the file open status.  */
   if (nor_ospi_status != FX_SUCCESS)
   {
+    /* Error opening file, call error handler.  */
+    Error_Handler();
+  }
+
+  /* Seek to the beginning of the test file.  */
+  nor_ospi_status =  fx_file_seek(&fx_file, 0);
+
+  /* Check the file seek status.  */
+  if (nor_ospi_status != FX_SUCCESS)
+  {
+    /* Error performing file seek, call error handler.  */
+    Error_Handler();
+  }
+  
+  for(int i =0; i< WR_COUNT; i++)
+  {
+	  sprintf(itoa,"%d", i );
+	  strcpy(data, itoa);
+	  for(int y = 0;y < 7; y++)
+	  {
+		  if(data[y] == 0x00)
+		  {
+			  data[y]  = 0x20;
+		  }
+	  }
+	  /* Write a string to the test file.  */
+	  nor_ospi_status =  fx_file_write(&fx_file, data, sizeof(data));
+
+	  /* Check the file write status.  */
+	  if (nor_ospi_status != FX_SUCCESS)
+	  {
+		/* Error writing to a file, call error handler.  */
+		Error_Handler();
+	  }
+  }
+
+  /* Close the test file.  */
+  nor_ospi_status =  fx_file_close(&fx_file);
+
+  /* Check the file close status.  */
+  if (nor_ospi_status != FX_SUCCESS)
+  {
+    /* Error closing the file, call error handler.  */
+    Error_Handler();
+  }
+
+  nor_ospi_status = fx_media_flush(&nor_ospi_flash_disk);
+
+  /* Check the media flush  status.  */
+  if (nor_ospi_status != FX_SUCCESS)
+  {
+    /* Error closing the file, call error handler.  */
+    Error_Handler();
+  }
+#endif
+
+   /* Open the test file.  */
+  nor_ospi_status =  fx_file_open(&nor_ospi_flash_disk, &fx_file, "ZW.TXT", FX_OPEN_FOR_READ);
+
+  /* Check the file open status.  */
+  if (nor_ospi_status != FX_SUCCESS)
+  {
+	printf("Open ZW.TXT error.\n");
     /* Error opening file, call error handler.  */
     Error_Handler();
   }

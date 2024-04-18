@@ -41,7 +41,8 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 #define WR_COUNT         2000
-#define WRITE_TEST          1
+#define WRITE_TEST          0
+#define DEL_CREATE_TEST     0
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

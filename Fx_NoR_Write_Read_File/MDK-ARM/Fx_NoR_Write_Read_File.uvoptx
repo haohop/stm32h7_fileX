@@ -675,7 +675,7 @@
 
   <Group>
     <GroupName>Middlewares/FileX/File System/FileX/Core</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -3467,7 +3467,7 @@
 
   <Group>
     <GroupName>Middlewares/Interfaces/File System/LevelX OctoSPI memory interface</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -3487,7 +3487,7 @@
 
   <Group>
     <GroupName>Middlewares/Interfaces/File System/FileX LevelX NOR interface</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
